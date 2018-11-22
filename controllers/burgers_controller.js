@@ -14,30 +14,24 @@ var burgers = require("../models/burger.js");
     })
  })
 
- router.post('/burgers', function(req, res){
+ router.get('/index', function (req, res) {
+    burgers.selectAll(function(data) {
+      var hbsObject = { burgers: data };
+     
+      res.render('index', hbsObject);
+    });
+  });
 
-    burgers.insertOne([
-        'burger_name'
-    ], [
-        req.body.burger_name
-    ], function(data) {
+  router.post('/burger/create', function (req, res) {
+    burgers.insertOne(req.body.burger_name, function() {
+      res.redirect('/index');
+    });
+  });
 
-        res.redirect('/');
-    })
-
-});
-
- router.put('/burgers/:id', function(req, res){
-
-    burgers.updateOne({
-        devoured: true},
-
-        condition, function(data){
-
-            res.redirect('/')
-        });
-
-
-    })
+  router.post('/burger/eat/:id', function (req, res) {
+    burgers.updateOne(req.params.id, function() {
+      res.redirect('/index');
+    });
+  });
     
     module.exports = router;
