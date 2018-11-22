@@ -1,57 +1,65 @@
-require("./connection.js");
+var connection = require("./connection.js");
+
+var mysql = require('mysql');
+
+
+if (process.env.JAWSDB_URL) {
+
+    connection = mysql.createConnection(process.env.JAWSDB_URL);
+
+} else {
+
+
+    connection = mysql.createConnection({
+
+        host: "localhost",
+        port: 3306,
+        user: "root",
+        password: "root",
+        database: "burgers_db"
+    })
+
+};
 
 var orm = {
 
-    selectAll: function (tableInput, cb) {
+    selectAll: function(cb) {
 
-        connection.query(queryString, function (err, result) {
+        connection.query("SELECT * FROM burgers", function (err, result) {
             if (err) {
                 throw err;
             }
 
 
-            cb(result);
+            return result;
         });
     },
 
 
-    insertOne: function (table, vals, cb) {
+    insertOne: function (burger_name, cb) {
 
-        var queryString = "INSERT INTO " + table;
+        connection.query('INSERT INTO burgers SET ?', {
+            burger_name: burger_name,
+            devoured: false,
 
-        queryString += " (";
-        queryString += ") ";
-        queryString += "VALUES (";
-        queryString += ") ";
-
-
-        connection.query(queryString, vals, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
+        }, function (err, result) {
+            if (err) throw err;
+           return result;
         });
+
     },
 
 
-    updateOne: function (table, condition, cb) {
+    updateOne: function (id, cb) {
 
-        var queryString = "UPDATE " + table;
-
-        queryString += " SET ";
-        queryString += " WHERE ";
-        queryString += condition;
-
-
-        connection.query(queryString, function (err, result) {
-            if (err) {
-                throw err;
-            }
-
-            cb(result);
+        connection.query('UPDATE burgers SET ? WHERE ?', [{ devoured: true }, { id: id }], function (err, result) {
+            if (err) throw err;
+            return result;
         });
+
     }
+
 };
+
 
 module.exports = orm;
