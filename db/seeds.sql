@@ -1,11 +1,17 @@
-USE burgers_db; 
 
-INSERT INTO burgers (id, burger_name, devoured)
-VALUES (1, "Triple Cheese Burger", True);
-
-INSERT INTO burgers (id, burger_name, devoured)
-VALUES (2, "Veggie Burger", False);
-
-INSERT INTO burgers (id, burger_name, devoured)
-VALUES (3, "Heart Attack Burger", True);
-
+INSERT INTO burgers (
+burger_name,
+devoured
+) VALUES
+(
+"Triple Cheese Bypass Burger",
+0
+),
+(
+"Impossible Burger",
+0
+),
+(
+"Double Bacon, Fried Egg & Cheese",
+0
+);
